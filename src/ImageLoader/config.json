@@ -1,0 +1,8 @@
+﻿{
+  "AppSettings": {
+    "SiteTitle": "Image Loader"
+  },
+  "Data": {
+    "ConnectionString": "Server=tcp:imageloader.database.windows.net,1433;Database=ImageLoader;User ID=atarason@imageloader;Password=lotos!99!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;"
+  }
+}

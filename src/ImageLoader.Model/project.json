@@ -1,0 +1,37 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "ImageLoader.Model Class Library",
+  "authors": [ "Taras_Smirnov" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "EntityFramework.SqlServer": "7.0.0-beta8",
+    "EntityFramework.Commands": "7.0.0-beta8"
+  },
+
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": {
+      "dependencies": {
+        "System.Collections": "4.0.11-beta-23225",
+        "System.Data.Common": "4.0.1-beta-23225",
+        "System.Linq": "4.0.1-beta-23225",
+        "System.Runtime": "4.0.21-beta-23225",
+        "Microsoft.CSharp": "4.0.1-beta-23225"
+      }
+    }
+  },
+
+  "EntityFramework": {
+    "BloggingContext": {
+      "DataStore": "EntityFramework.SqlServer",
+      "ConnectionString": "Server=tcp:imageloader.database.windows.net,1433;Database=ImageLoader;User ID=atarason@imageloader;Password=lotos!99!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;"
+    }
+  },
+
+  "commands": {
+    "ef": "EntityFramework.Commands"
+  }
+}
