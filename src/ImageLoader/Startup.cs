@@ -1,4 +1,6 @@
-﻿using ImageLoader.Model.Contexts;
+﻿using ImageLoader.DAL.Abstraction.UnitOfWork;
+using ImageLoader.DAL.Concrete.UnitOfWork;
+using ImageLoader.Models.Contexts;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
@@ -12,7 +14,6 @@ namespace ImageLoader
     {
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
-
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
                 .SetBasePath(appEnv.ApplicationBasePath)
@@ -27,6 +28,8 @@ namespace ImageLoader
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
             services.AddEntityFramework()
                 .AddSqlServer()
                 .AddDbContext<ImageLoaderDbContext>(options =>
@@ -34,11 +37,16 @@ namespace ImageLoader
                     options.UseSqlServer(Configuration["Data:ConnectionString"]);
                 });
 
-            services.AddMvc();
+            services.AddScoped<IUnitOfWork, DBUnitOfWork>();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseBrowserLink();
+            }
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

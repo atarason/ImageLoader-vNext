@@ -6,6 +6,7 @@
     <title></title>
 </head>
 <body ng-app="app">
+
     <header>
         <nav class="navbar navbar-default">
             <div class="container">
@@ -13,6 +14,7 @@
             </div>
         </nav>
     </header>
+
     <div ng-controller="homeCtrl as vm" id="main" class="container">
         <div class="row">
             <form>
@@ -26,7 +28,8 @@
                 </div>
             </form>
         </div>
-        <div class="row">
+
+        <script type="text/ng-template" id="/tpl.html">
             <ul class="list-unstyled list-inline">
                 <li ng-repeat="image in vm.images">
                     <img class="img-responsive img-rounded img-thumbnail" ng-src="{{image.url}}" />
@@ -38,8 +41,13 @@
                     </div>
                 </li>
             </ul>
-        </div>
+        </script>
+
+        <div class="row" id="tpl-content" ng-include src="vm.currentTpl"></div>
+
     </div>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/angular/angular.min.js"></script>
     <script src="~/app/app.js"></script>
 </body>
