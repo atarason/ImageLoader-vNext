@@ -12,7 +12,10 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta5",
     "bootstrap": "3.3.5",
     "jQuery": "2.1.4",
-    "angularjs": "1.4.7"
+    "angularjs": "1.4.7",
+    "System.Net.Http": "4.0.0",
+    "AzureSDK2.2DLLs": "1.0.0",
+    "UnofficialAzure.StorageClient": "1.0.0"
   },
 
   "commands": {
@@ -23,10 +26,12 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "System.Linq.Queryable": "4.0.1-beta-23409"
+        "Microsoft.Net.Http": "2.2.29",
+        "RestSharp": "105.2.3",
+        "System.Linq.Queryable": "4.0.1-beta-23409",
+        "System.Net.Http": "4.0.0"
       }
-    },
-    "dnxcore50": { }
+    }    
   },
 
   "publishExclude": [

@@ -3,6 +3,7 @@
     "SiteTitle": "Image Loader"
   },
   "Data": {
+    "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=imageloader;AccountKey=iG4QzXIhV9YkfAGIMhMpVmrXmP7mNFnOLxQ9yf1GPCMHM0EwBKF9jyAKGt6+GP9zw2UwgGQm/3GwX1rMRLMBUw==",
     "ConnectionString": "Server=tcp:imageloader.database.windows.net,1433;Database=ImageLoader;User ID=atarason@imageloader;Password=lotos!99!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;"
   }
 }

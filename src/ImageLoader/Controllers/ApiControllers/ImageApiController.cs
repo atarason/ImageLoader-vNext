@@ -1,12 +1,13 @@
 ﻿using ImageLoader.DAL.Abstraction.UnitOfWork;
 using ImageLoader.Models.Entities;
 using ImageLoader.ModelViews;
+using ImageLoader.Operations.Abstraction;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.Entity.ChangeTracking;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,12 +16,36 @@ namespace ImageLoader.Controllers.ApiControllers
     [Route("api/[controller]")]
     public class ImageApiController : Controller
     {
+        #region Private Fields
+
+        /// <summary>
+        ///
+        /// </summary>
         private readonly IUnitOfWork _unitOfWork;
 
-        public ImageApiController(IUnitOfWork unitOfWork)
+        /// <summary>
+        ///
+        /// </summary>
+        private readonly IImageOperations _imageOperations;
+
+        #endregion Private Fields
+
+        #region Constructors
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="unitOfWork"></param>
+        /// <param name="imageOperations"></param>
+        public ImageApiController(IUnitOfWork unitOfWork, IImageOperations imageOperations)
         {
             _unitOfWork = unitOfWork;
+            _imageOperations = imageOperations;
         }
+
+        #endregion Constructors
+
+        #region Public Methods
 
         // GET: api/values
         [HttpGet]
@@ -43,7 +68,7 @@ namespace ImageLoader.Controllers.ApiControllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]ImageModelView model)
+        public async Task<IActionResult> Post([FromBody] ImageModelView model)
         {
             try
             {
@@ -52,9 +77,16 @@ namespace ImageLoader.Controllers.ApiControllers
                     return HttpBadRequest(ModelState.Values);
                 }
 
+                #region Storage Image
+
+                // Donwload Image and storage it to Azure Blob
+                var imageBytes = _imageOperations.StorageImage(model.url);
+
+                #endregion Storage Image
+
                 var entity = new Image
                 {
-                    URL = model.url,
+                    URL = imageBytes.Item2,
                     Id = Guid.NewGuid(),
                     UpdatedDate = DateTimeOffset.Now,
                     CreatedDate = DateTimeOffset.Now,
@@ -113,6 +145,10 @@ namespace ImageLoader.Controllers.ApiControllers
                 }
 
                 var image = _unitOfWork.ImageRepository.GetById(id);
+
+                // Remove file from azure blob
+                _imageOperations.RemoveImage(image.URL);
+
                 _unitOfWork.ImageRepository.Delete(image);
 
                 return Ok("Image removed successfully");
@@ -122,5 +158,7 @@ namespace ImageLoader.Controllers.ApiControllers
                 return HttpBadRequest(e.Message);
             }
         }
+
+        #endregion Public Methods
     }
 }

@@ -1,6 +1,8 @@
 ﻿using ImageLoader.DAL.Abstraction.UnitOfWork;
 using ImageLoader.DAL.Concrete.UnitOfWork;
 using ImageLoader.Models.Contexts;
+using ImageLoader.Operations.Abstraction;
+using ImageLoader.Operations.Concrete;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
@@ -23,7 +25,7 @@ namespace ImageLoader
             Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; set; }
+        public static IConfiguration Configuration { get; set; }
 
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -38,6 +40,7 @@ namespace ImageLoader
                 });
 
             services.AddScoped<IUnitOfWork, DBUnitOfWork>();
+            services.AddScoped<IImageOperations, ImageOperations>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
