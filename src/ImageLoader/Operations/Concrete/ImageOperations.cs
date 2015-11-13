@@ -1,6 +1,8 @@
-﻿using ImageLoader.Operations.Abstraction;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.StorageClient;
+﻿using ImageLoader.AzureTables;
+using ImageLoader.Operations.Abstraction;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.IO;
 using System.Net;
@@ -18,11 +20,17 @@ namespace ImageLoader.Operations.Concrete
         private readonly CloudBlobContainer _container;
 
         /// <summary>
-        /// 
+        ///
+        /// </summary>
+        private readonly CloudTableClient _cloudTableClient;
+
+        /// <summary>
+        ///
         /// </summary>
         public ImageOperations()
         {
             _container = GetCloudBlobContainerClient();
+            _cloudTableClient = GetCloudTableContainerClient();
         }
 
         #region Public Methods
@@ -52,6 +60,19 @@ namespace ImageLoader.Operations.Concrete
         public void RemoveImage(string url)
         {
             DeleteDocumentFromBlob(url);
+        }
+
+        public void LogUserAgentData(UserAgent model)
+        {
+            CloudTable table = _cloudTableClient.GetTableReference("m4freetable");
+
+            // Create the batch operation.
+            TableBatchOperation batchOperation = new TableBatchOperation();
+
+            batchOperation.Insert(model);
+
+            // Execute the batch operation.
+            table.ExecuteBatch(batchOperation);
         }
 
         #endregion Public Methods
@@ -99,7 +120,7 @@ namespace ImageLoader.Operations.Concrete
             try
             {
                 // Retrieve reference to a blob.
-                CloudBlockBlob blockBlob = _container.GetBlockBlobReference(blob);
+                CloudBlockBlob blockBlob = _container.GetBlockBlobReference(Path.GetFileName(blob));
 
                 // Delete the blob.
                 if (!blockBlob.DeleteIfExists())
@@ -111,6 +132,26 @@ namespace ImageLoader.Operations.Concrete
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        private CloudTableClient GetCloudTableContainerClient()
+        {
+            // Get Connection string from config.json
+            string connectionString = Startup.Configuration["Data:StorageConnectionString"];
+
+            // Retrieve storage account from connection string.
+            CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+
+            CloudTableClient tableClient = account.CreateCloudTableClient();
+
+            CloudTable table = tableClient.GetTableReference("m4freetable");
+            table.CreateIfNotExists();
+
+            return tableClient;
         }
 
         /// <summary>
@@ -140,7 +181,7 @@ namespace ImageLoader.Operations.Concrete
                 });
 
                 // Create the container if it doesn't already exist.
-                if (container.CreateIfNotExist())
+                if (container.CreateIfNotExists())
                 {
                 }
 

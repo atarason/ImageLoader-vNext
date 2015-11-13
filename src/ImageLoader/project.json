@@ -14,8 +14,9 @@
     "jQuery": "2.1.4",
     "angularjs": "1.4.7",
     "System.Net.Http": "4.0.0",
-    "AzureSDK2.2DLLs": "1.0.0",
-    "UnofficialAzure.StorageClient": "1.0.0"
+    "WindowsAzure.Storage": "6.1.0",
+    "UnofficialAzure.StorageClient": "1.0.0",
+    "AzureSDK2.2DLLs": "1.0.0"
   },
 
   "commands": {
@@ -27,7 +28,6 @@
     "dnx451": {
       "dependencies": {
         "Microsoft.Net.Http": "2.2.29",
-        "RestSharp": "105.2.3",
         "System.Linq.Queryable": "4.0.1-beta-23409",
         "System.Net.Http": "4.0.0"
       }

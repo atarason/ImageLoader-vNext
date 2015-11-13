@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageLoader.AzureTables;
+using System;
 
 namespace ImageLoader.Operations.Abstraction
 {
@@ -15,9 +16,15 @@ namespace ImageLoader.Operations.Abstraction
         Tuple<string, string> StorageImage(string url);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="url"></param>
         void RemoveImage(string url);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="model"></param>
+        void LogUserAgentData(UserAgent model);
     }
 }
